@@ -1,5 +1,0 @@
-var sunupsundown = (function () {
-
-    
-
-}());

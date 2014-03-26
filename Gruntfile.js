@@ -6,7 +6,7 @@ module.exports = function(grunt) {
 
     concat: {
       vendor: {
-        src: ['js/vendor/jquery*.js', 'js/vendor/*.js', '!js/vendor/all.js'],
+        src: ['js/vendor/jquery*.js', 'js/vendor/*.js', '!js/vendor/all.js', '!js/vendor/modernizr-custom.min.js'],
         dest: 'js/vendor/all.js'
       },
     },
@@ -17,7 +17,7 @@ module.exports = function(grunt) {
       },
       app: {
         files: {
-          'js/sunupsundown.min.js': ['js/sunupsundown.js']
+          'js/sunupsundown.min.js': ['js/sunupsundown/sunupsundown.js']
         }
       },
       vendor: {
