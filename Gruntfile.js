@@ -54,7 +54,7 @@ module.exports = function(grunt) {
       },
       js: {
         files: ['<%= jshint.all %>'], // exclude the vendor files from linting,
-        tasks: ['jshint', 'concat:app', 'uglify:app']
+        tasks: ['jshint', 'uglify:app']
       },
       livereload: {
         options: {
