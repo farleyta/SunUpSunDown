@@ -61,14 +61,17 @@ var sunupsundown = (function () {
             if (request.status >= 200 && request.status < 400){
                 // Success!
                 data = JSON.parse(request.responseText);
+                sunData = data.query.results.sun;
 
                 // Set the sunrise and first light times
-                sunUp = formatSunObjTime( data.query.results.sun.morning.sunrise, data.query.results.sun.date );
+                sunUp = formatSunObjTime( sunData.morning.sunrise, sunData.date );
                 firstLight = getOffsetTime(sunUp, -30);
 
                 // And the sunset and last light times
-                sunDown = formatSunObjTime( data.query.results.sun.evening.sunset, data.query.results.sun.date );
+                sunDown = formatSunObjTime( sunData.evening.sunset, sunData.date );
                 lastLight = getOffsetTime(sunDown, 30);
+
+                console.log(sunUp + " | " + firstLight + "\n" + sunDown + " | " + lastLight);
 
             } else {
                 console.log("Sorry, the EarthTools service returned an error: " + request.status);
@@ -109,14 +112,16 @@ var sunupsundown = (function () {
 
     }
 
-    
-    // first, use the Geolocation API to get the Lat/Lng
-    getLatLng();
-
-    // Listen for when the Lat/Lng has been returned, then build the URL
+    // This custom event listens for when the location is received and then fetches
+    // the data from EarthTools
     window.addEventListener("locationReported", function(evt) {
         var urlToFetch = buildXHR(evt.detail.lat, evt.detail.lng);
         getSunUpSunDown(urlToFetch);
     }, false);
+    
+    // first, use the Geolocation API to get the Lat/Lng – nothing is returned,
+    // instead the custom "locationReported" event is triggered when the location
+    // is successfully retrieved
+    getLatLng();
 
 }());
