@@ -39,13 +39,37 @@ var sunupsundown = (function () {
         var sign = (date.getTimezoneOffset() > 0) ? "-" : "";
         return sign + Math.floor( Math.abs(date.getTimezoneOffset()) / 60);
     }
+
+    // Get the data from EarthTools
+    function getSunUpSunDown(urlToFetch) {
+        request = new XMLHttpRequest();
+        request.open('GET', urlToFetch, true);
+
+        request.onload = function() {
+            if (request.status >= 200 && request.status < 400){
+                // Success!
+                console.log(request.responseText);
+            } else {
+                console.log("Sorry, the EarthTools service returned an error: " + request.status);
+            }
+        };
+
+        request.onerror = function() {
+            console.log("Sorry, there was an error establishing a connection to the EarthTools service.");
+        };
+
+        request.send();
+    }
+
+
     
     // first, use the Geolocation API to get the Lat/Lng
     getLatLng();
 
     // Listen for when the Lat/Lng has been returned, then build the URL
     window.addEventListener("locationReported", function(evt) {
-        console.log( buildXHR(evt.detail.lat, evt.detail.lng) );
+        var urlToFetch = buildXHR(evt.detail.lat, evt.detail.lng);
+        getSunUpSunDown(urlToFetch);
     }, false);
 
 }());
