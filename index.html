@@ -9,7 +9,28 @@
 </head>
 <body>
 
-<script src="js/vendor.min.js"></script>
+    <section class="sunInfo">
+        <h1>Sunrise Times:</h1>
+        <div id="first-light">
+            <span class="first-light-info">First light: </span>
+            <time class="first-light" datetime=""></time>
+        </div>
+        <div id="sunrise">
+            <span class="sunrise-info">Sunrise: </span>
+            <time class="sunrise" datetime=""></time>
+        </div>
+
+        <h1>Sunset Times:</h1>
+        <div id="sunset">
+            <span class="sunset-info">Sunset: </span>
+            <time class="sunset" datetime=""></time>
+        </div>
+        <div id="last-light">
+            <span class="last-light-info">First light: </span>
+            <time class="last-light" datetime=""></time>
+        </div>
+    </section>
+
 <script>
     // Quick feature detect for Geolocation API – this is a requirement
     Modernizr.load({

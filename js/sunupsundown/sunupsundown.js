@@ -71,7 +71,11 @@ var sunupsundown = (function () {
                 sunDown = formatSunObjTime( sunData.evening.sunset, sunData.date );
                 lastLight = getOffsetTime(sunDown, 30);
 
-                console.log(sunUp + " | " + firstLight + "\n" + sunDown + " | " + lastLight);
+                // Update the DOM with the new times
+                updateDOMTime('first-light', firstLight);
+                updateDOMTime('sunrise', sunUp);
+                updateDOMTime('sunset', sunDown);
+                updateDOMTime('last-light', lastLight);
 
             } else {
                 console.log("Sorry, the EarthTools service returned an error: " + request.status);
@@ -111,6 +115,21 @@ var sunupsundown = (function () {
         return newTime;
 
     }
+
+    // Updates the DOM element with the time param
+    function updateDOMTime(el, timeObj) {
+        var timeEl = document.getElementById(el),
+            timeTag = timeEl.getElementsByTagName("time"),
+            // a bit of extra work to pad the hours/mins with leading 0 when necessary
+            timeHour = (timeObj.getHours()<10?'0':'') + timeObj.getHours(),
+            timeMin = (timeObj.getMinutes()<10?'0':'') + timeObj.getMinutes(),
+            timeAmPm = timeHour<12?'am':'pm';
+
+        timeTag[0].setAttribute('datetime', timeObj.toISOString());
+        timeTag[0].innerHTML = timeHour + ":" + timeMin + "<span class='ampm'>" + timeAmPm + "</span>";
+    }
+
+    //–––––––– Get things rolling ––––––––––––//
 
     // This custom event listens for when the location is received and then fetches
     // the data from EarthTools
