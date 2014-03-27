@@ -1,5 +1,10 @@
 var sunupsundown = (function () {
 
+    var firstLight, // 30 mins prior to sunrise
+        sunUp, // sunrise
+        sunDown, // sunset
+        lastLight; // 30 mins after sunset
+
     // Use Geolcation to grab user's lat/lng
     function getLatLng(){
         navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
@@ -47,7 +52,7 @@ var sunupsundown = (function () {
         // and they only return data as XML, so no possibility of using JSONP to
         // get around cross-domain issues.  Hence the ugly YQL dependency.
         
-        var urlForYQL = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D'" + encodeURIComponent(urlToFetch) + "'&format=json&diagnostics=true&callback=";
+        var urlForYQL = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D'" + encodeURIComponent(urlToFetch) + "'&format=json";
 
         request = new XMLHttpRequest();
         request.open('GET', urlForYQL, true);
@@ -56,7 +61,11 @@ var sunupsundown = (function () {
             if (request.status >= 200 && request.status < 400){
                 // Success!
                 data = JSON.parse(request.responseText);
-                console.log(data.query.results);
+                
+                // Set the sunrise and first light times
+                sunUp = formatSunUpTime( data.query.results.sun );
+                firstLight = getFirstLightTime(sunUp, 30);
+
             } else {
                 console.log("Sorry, the EarthTools service returned an error: " + request.status);
             }
@@ -69,6 +78,31 @@ var sunupsundown = (function () {
         request.send();
     }
 
+    // This takes the messy sun object returned by EarthTools and returns a Date()
+    function formatSunUpTime(sunObj) {
+        // get the pieces of the Date obj from the sun obj
+        var time = sunObj.morning.sunrise,
+            day = sunObj.date.day,
+            mon = sunObj.date.month,
+            // we don't have the year from sunObj, so assume it is the current year
+            year = new Date().getFullYear(),
+            formattedDate = year + "-" + mon + "-" + day;
+
+            sunriseTime = new Date(formattedDate + " " + time); // ie "1970-01-01 12:00:00"
+
+        return sunriseTime;
+    }
+
+    // This returns a date obj representing the time 30 mins before sunrise
+    function getFirstLightTime(sunriseTime, minsPrior) {
+        var firstLight = new Date(sunriseTime);
+
+        // Change the mins to be earlier than sunrise
+        firstLight.setMinutes(sunriseTime.getMinutes() - minsPrior);
+
+        return firstLight;
+
+    }
 
     
     // first, use the Geolocation API to get the Lat/Lng
