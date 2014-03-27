@@ -71,6 +71,9 @@ var sunupsundown = (function () {
                 sunDown = formatSunObjTime( sunData.evening.sunset, sunData.date );
                 lastLight = getOffsetTime(sunDown, 30);
 
+                // Remove the loading class
+                toggleLoading();
+
                 // Update the DOM with the new times
                 updateDOMTime('first-light', firstLight);
                 updateDOMTime('sunrise', sunUp);
@@ -127,6 +130,31 @@ var sunupsundown = (function () {
 
         timeTag[0].setAttribute('datetime', timeObj.toISOString());
         timeTag[0].innerHTML = timeHour + ":" + timeMin + "<span class='ampm'>" + timeAmPm + "</span>";
+    }
+
+    // Toggles the loading class on the main element
+    function toggleLoading() {
+
+        var el = document.querySelectorAll('.sunInfo')[0],
+            className = 'loading';
+
+        if (el.classList) {
+            el.classList.toggle(className);
+        } else {
+            var classes = el.className.split(' ');
+            var existingIndex = -1;
+            for (var i = classes.length; i--;) {
+                if (classes[i] === className)
+                    existingIndex = i;
+            }
+
+            if (existingIndex >= 0)
+                classes.splice(existingIndex, 1);
+            else
+                classes.push(className);
+
+            el.className = classes.join(' ');
+        }
     }
 
     //–––––––– Get things rolling ––––––––––––//
