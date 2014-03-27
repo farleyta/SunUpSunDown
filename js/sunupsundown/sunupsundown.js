@@ -1,6 +1,7 @@
 var sunupsundown = (function () {
 
-    var firstLight, // 30 mins prior to sunrise
+    var sunInfoEl = '.sun-info',
+        firstLight, // 30 mins prior to sunrise
         sunUp, // sunrise
         sunDown, // sunset
         lastLight; // 30 mins after sunset
@@ -135,7 +136,7 @@ var sunupsundown = (function () {
     // Toggles the loading class on the main element
     function toggleLoading() {
 
-        var el = document.querySelectorAll('.sunInfo')[0],
+        var el = document.querySelectorAll(sunInfoEl)[0],
             className = 'loading';
 
         if (el.classList) {

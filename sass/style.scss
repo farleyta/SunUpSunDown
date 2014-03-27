@@ -1,4 +1,66 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300);
+
 @import "compass";
 @import "normalize";
 
-// Custom Styles Here
+// $orange: ,
+// $yellow: ,
+// $purple: ,
+$white: #FFF;
+$greyLight: #EDEDED;
+$grey: #666;
+$greyDark: #333;
+
+body {
+	background: image-url("bg.png");
+	font-family: 'Open Sans', sans-serif;
+	color: $white;
+}
+
+.sun-info {
+	background: $white;
+	margin: 10em auto;
+	min-height: 10em;
+	padding: 1em;
+	width: 80%;
+
+	@include single-box-shadow( rgba($greyDark, 0.1), 0, 0, 0.25em, 0.25em );
+	@include border-radius( 0.25em );
+
+	// hide the divs and h1s during loading
+	&.loading {
+
+		background: $white image-url("loading.gif") no-repeat center center;
+
+		#sunup,
+		#sundown {
+			display: none;
+		}
+	}
+	#sunup,
+	#sundown {
+		display: block;
+	}
+}
+
+#sunup {
+	$experimental-support-for-svg: true;
+	@include background-image(linear-gradient(left, #633178, #9b4242, #d87319, #ffc445));
+	padding: 1em;
+}
+
+#first-light {
+	.first-light-info {
+		display: block;
+	}
+	time {
+		font-size: 2em;
+		font-weight: 300;
+	}
+}
+
+#sundown {
+	$experimental-support-for-svg: true;
+	@include background-image(linear-gradient(left, #ffc445, #d87319, #9b4242, #633178));
+	padding: 1em;
+}
