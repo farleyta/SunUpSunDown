@@ -164,7 +164,7 @@ var sunupsundown = (function () {
     // the data from EarthTools
     window.addEventListener("locationReported", function(evt) {
         var urlToFetch = buildXHR(evt.detail.lat, evt.detail.lng);
-        getSunUpSunDown(urlToFetch);
+        // getSunUpSunDown(urlToFetch);
     }, false);
     
     // first, use the Geolocation API to get the Lat/Lng – nothing is returned,

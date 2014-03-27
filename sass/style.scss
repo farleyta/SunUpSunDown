@@ -2,6 +2,7 @@
 
 @import "compass";
 @import "normalize";
+@import "animations";
 
 // $orange: ,
 // $yellow: ,
@@ -20,6 +21,7 @@ body {
 .sun-info {
 	background: $white;
 	margin: 10em auto;
+	max-width: 36em;
 	min-height: 10em;
 	padding: 1em;
 	width: 80%;
@@ -30,37 +32,64 @@ body {
 	// hide the divs and h1s during loading
 	&.loading {
 
-		background: $white image-url("loading.gif") no-repeat center center;
+		// background: $white image-url("loading.gif") no-repeat center center;
 
 		#sunup,
 		#sundown {
-			display: none;
+			// display: none;
 		}
 	}
 	#sunup,
 	#sundown {
 		display: block;
+		overflow: hidden;
+
+		h1 {
+			font-weight: normal;
+			font-size: 1.75em;
+			margin: 0 0 0.5em;
+		}
 	}
+}
+
+@mixin large-time {
+	font-size: 1.5em;
+	font-weight: 300;
 }
 
 #sunup {
 	$experimental-support-for-svg: true;
 	@include background-image(linear-gradient(left, #633178, #9b4242, #d87319, #ffc445));
 	padding: 1em;
+	margin-bottom: 1em;
 }
-
-#first-light {
-	.first-light-info {
-		display: block;
-	}
-	time {
-		font-size: 2em;
-		font-weight: 300;
-	}
-}
-
 #sundown {
 	$experimental-support-for-svg: true;
 	@include background-image(linear-gradient(left, #ffc445, #d87319, #9b4242, #633178));
 	padding: 1em;
+}
+
+#first-light,
+#sunrise,
+#sunset,
+#last-light {
+	.time-info,
+	 {
+		display: block;
+	}
+	time {
+		@include large-time;
+	}
+}
+
+#first-light,
+#sunset {
+	float: left;
+	width: 50%;
+}
+#sunrise,
+#last-light {
+	float: right;
+	text-align: right;
+	width: 50%;
 }
