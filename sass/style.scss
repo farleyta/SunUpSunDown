@@ -16,6 +16,7 @@ body {
 	background: image-url("bg.png");
 	font-family: 'Open Sans', sans-serif;
 	color: $white;
+	@include text-shadow(1px 1px 1px rgba($greyDark, 0.65));
 }
 
 .sun-info {
@@ -32,11 +33,11 @@ body {
 	// hide the divs and h1s during loading
 	&.loading {
 
-		// background: $white image-url("loading.gif") no-repeat center center;
+		background: $white image-url("loading.gif") no-repeat center center;
 
 		#sunup,
 		#sundown {
-			// display: none;
+			display: none;
 		}
 	}
 	#sunup,

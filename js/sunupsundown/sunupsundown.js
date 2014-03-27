@@ -73,13 +73,19 @@ var sunupsundown = (function () {
                 lastLight = getOffsetTime(sunDown, 30);
 
                 // Remove the loading class
-                toggleLoading();
+                toggleClass('loading', sunInfoEl);
 
                 // Update the DOM with the new times
                 updateDOMTime('first-light', firstLight);
                 updateDOMTime('sunrise', sunUp);
                 updateDOMTime('sunset', sunDown);
                 updateDOMTime('last-light', lastLight);
+
+                // Add support for animation to each element we want to animate
+                toggleClass('animated', '#sunup h1, #sundown h1, #first-light, #sunrise, #sunset, #last-light');
+                // And the specific animation classes
+                toggleClass('fadeInDown', '#sunup h1, #sundown h1');
+                toggleClass('fadeInUp', '#first-light, #sunrise, #sunset, #last-light');
 
             } else {
                 console.log("Sorry, the EarthTools service returned an error: " + request.status);
@@ -133,28 +139,29 @@ var sunupsundown = (function () {
         timeTag[0].innerHTML = timeHour + ":" + timeMin + "<span class='ampm'>" + timeAmPm + "</span>";
     }
 
-    // Toggles the loading class on the main element
-    function toggleLoading() {
+    // Adds class(es) to whichever element is passed in
+    function toggleClass(className, elName) {
+        var els = document.querySelectorAll(elName);
 
-        var el = document.querySelectorAll(sunInfoEl)[0],
-            className = 'loading';
+        for (var i = els.length - 1; i >= 0; i--) {
+            var el = els[i];
 
-        if (el.classList) {
-            el.classList.toggle(className);
-        } else {
-            var classes = el.className.split(' ');
-            var existingIndex = -1;
-            for (var i = classes.length; i--;) {
-                if (classes[i] === className)
-                    existingIndex = i;
+            if (el.classList) {
+                el.classList.toggle(className);
+            } else {
+                var existingIndex = -1;
+                for (var j = classes.length; j--;) {
+                    if (classes[j] === className)
+                        existingIndex = j;
+                }
+
+                if (existingIndex >= 0)
+                    classes.splice(existingIndex, 1);
+                else
+                    classes.push(className);
+
+                el.className = classes.join(' ');
             }
-
-            if (existingIndex >= 0)
-                classes.splice(existingIndex, 1);
-            else
-                classes.push(className);
-
-            el.className = classes.join(' ');
         }
     }
 
@@ -164,7 +171,7 @@ var sunupsundown = (function () {
     // the data from EarthTools
     window.addEventListener("locationReported", function(evt) {
         var urlToFetch = buildXHR(evt.detail.lat, evt.detail.lng);
-        // getSunUpSunDown(urlToFetch);
+        getSunUpSunDown(urlToFetch);
     }, false);
     
     // first, use the Geolocation API to get the Lat/Lng – nothing is returned,
