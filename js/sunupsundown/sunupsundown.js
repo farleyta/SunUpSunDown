@@ -61,10 +61,14 @@ var sunupsundown = (function () {
             if (request.status >= 200 && request.status < 400){
                 // Success!
                 data = JSON.parse(request.responseText);
-                
+
                 // Set the sunrise and first light times
-                sunUp = formatSunUpTime( data.query.results.sun );
-                firstLight = getFirstLightTime(sunUp, 30);
+                sunUp = formatSunObjTime( data.query.results.sun.morning.sunrise, data.query.results.sun.date );
+                firstLight = getOffsetTime(sunUp, -30);
+
+                // And the sunset and last light times
+                sunDown = formatSunObjTime( data.query.results.sun.evening.sunset, data.query.results.sun.date );
+                lastLight = getOffsetTime(sunDown, 30);
 
             } else {
                 console.log("Sorry, the EarthTools service returned an error: " + request.status);
@@ -79,28 +83,29 @@ var sunupsundown = (function () {
     }
 
     // This takes the messy sun object returned by EarthTools and returns a Date()
-    function formatSunUpTime(sunObj) {
+    // sunObj = sunrise or sunset
+    function formatSunObjTime(sunObj, sunObjDate) {
         // get the pieces of the Date obj from the sun obj
-        var time = sunObj.morning.sunrise,
-            day = sunObj.date.day,
-            mon = sunObj.date.month,
+        var time = sunObj,
+            day = sunObjDate.day,
+            mon = sunObjDate.month,
             // we don't have the year from sunObj, so assume it is the current year
             year = new Date().getFullYear(),
             formattedDate = year + "-" + mon + "-" + day;
 
-            sunriseTime = new Date(formattedDate + " " + time); // ie "1970-01-01 12:00:00"
+            sunObjTime = new Date(formattedDate + " " + time); // ie "1970-01-01 12:00:00"
 
-        return sunriseTime;
+        return sunObjTime;
     }
 
-    // This returns a date obj representing the time 30 mins before sunrise
-    function getFirstLightTime(sunriseTime, minsPrior) {
-        var firstLight = new Date(sunriseTime);
+    // This returns a date obj representing time time offset by the offset param
+    function getOffsetTime(firstTime, offset) {
+        var newTime = new Date(firstTime);
 
         // Change the mins to be earlier than sunrise
-        firstLight.setMinutes(sunriseTime.getMinutes() - minsPrior);
+        newTime.setMinutes(firstTime.getMinutes() + offset);
 
-        return firstLight;
+        return newTime;
 
     }
 
