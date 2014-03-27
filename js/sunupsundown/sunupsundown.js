@@ -42,13 +42,21 @@ var sunupsundown = (function () {
 
     // Get the data from EarthTools
     function getSunUpSunDown(urlToFetch) {
+
+        // Unfortunately, EarthTools does not implement a CORS Access-Control-Allow-Origin,
+        // and they only return data as XML, so no possibility of using JSONP to
+        // get around cross-domain issues.  Hence the ugly YQL dependency.
+        
+        var urlForYQL = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D'" + encodeURIComponent(urlToFetch) + "'&format=json&diagnostics=true&callback=";
+
         request = new XMLHttpRequest();
-        request.open('GET', urlToFetch, true);
+        request.open('GET', urlForYQL, true);
 
         request.onload = function() {
             if (request.status >= 200 && request.status < 400){
                 // Success!
-                console.log(request.responseText);
+                data = JSON.parse(request.responseText);
+                console.log(data.query.results);
             } else {
                 console.log("Sorry, the EarthTools service returned an error: " + request.status);
             }
