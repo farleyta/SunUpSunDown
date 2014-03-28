@@ -105,10 +105,10 @@ var sunupsundown = (function () {
     // sunObj = sunrise or sunset
     function formatSunObjTime(sunObj, sunObjDate) {
         // get the pieces of the Date obj from the sun obj
-        var time = sunObj,
-            sec = '59',
-            min = '20',
-            hour = '07',
+        var time = sunObj.split(':'), // comes in as "hr:min:sec"
+            sec = time[2],
+            min = time[1],
+            hour = time[0],
             // we have to pad the day and month with 0 when necessary
             day = (sunObjDate.day<10?'0':'') + sunObjDate.day,
             mon = (sunObjDate.month<10?'0':'') + sunObjDate.month,
