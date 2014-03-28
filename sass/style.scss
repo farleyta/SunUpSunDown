@@ -4,13 +4,25 @@
 @import "normalize";
 @import "animations";
 
-// $orange: ,
-// $yellow: ,
-// $purple: ,
+$yellow: #ffc445;
+$orange: #d87319;
+$orangeLight: #f4ae74;
+$red: #9b4242;
+$purple: #633178;
 $white: #FFF;
 $greyLight: #EDEDED;
 $grey: #666;
 $greyDark: #333;
+
+@mixin large-time {
+	font-size: 1.5em;
+	font-weight: 300;
+}
+@mixin sun-color-gradient($direction: left) {
+	$experimental-support-for-svg: true;
+	@include background-image(linear-gradient($direction, $purple, $red, $orange, $yellow));
+	padding: 1em;
+}
 
 body {
 	background: image-url("bg.png");
@@ -35,10 +47,21 @@ body {
 
 		background: $white image-url("loading.gif") no-repeat center center;
 
+		#loading-message {
+			display: block;
+		}
+
 		#sunup,
 		#sundown {
 			display: none;
 		}
+	}
+	#loading-message {
+		@include text-shadow(none);
+		color: #f4ae74;
+		display: none;
+		text-align: center;
+		margin-top: 7em;
 	}
 	#sunup,
 	#sundown {
@@ -53,21 +76,12 @@ body {
 	}
 }
 
-@mixin large-time {
-	font-size: 1.5em;
-	font-weight: 300;
-}
-
 #sunup {
-	$experimental-support-for-svg: true;
-	@include background-image(linear-gradient(left, #633178, #9b4242, #d87319, #ffc445));
-	padding: 1em;
+	@include sun-color-gradient("left");
 	margin-bottom: 1em;
 }
 #sundown {
-	$experimental-support-for-svg: true;
-	@include background-image(linear-gradient(left, #ffc445, #d87319, #9b4242, #633178));
-	padding: 1em;
+	@include sun-color-gradient("right");
 }
 
 #first-light,

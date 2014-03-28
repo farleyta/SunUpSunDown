@@ -1,6 +1,7 @@
 var sunupsundown = (function () {
 
     var sunInfoEl = '.sun-info',
+        messageEl,
         firstLight, // 30 mins prior to sunrise
         sunUp, // sunrise
         sunDown, // sunset
@@ -8,12 +9,13 @@ var sunupsundown = (function () {
 
     // Use Geolcation to grab user's lat/lng
     function getLatLng(){
+        updateStatusMessage('Fetching your location...');
         navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
     }
 
     // Callback function if there is an error grabbing the Geolocation
     function geoError(){
-        console.log("Sorry, your current location cannot be found.");
+        updateStatusMessage('Sorry, your current location cannot be found.');
     }
 
     // Callback function for when location is successfully received
@@ -23,8 +25,8 @@ var sunupsundown = (function () {
             lng: location.coords.longitude
         };
         // Create and dispatch a custom event for location being reported
-        var evt = document.createEvent("CustomEvent");
-        evt.initCustomEvent("locationReported", true, true, loc);
+        var evt = document.createEvent('CustomEvent');
+        evt.initCustomEvent('locationReported', true, true, loc);
         window.dispatchEvent(evt);
     }
 
@@ -37,12 +39,12 @@ var sunupsundown = (function () {
 
         // Construct the Earthtools URL - note that utcOffset will differ 
         // depending on DST, so we always set the final field to 0 (false)
-        return "http://www.earthtools.org/sun/" + lat + "/" + lng + "/" + day + "/" + mon + "/" + utcOffset + "/0";
+        return 'http://www.earthtools.org/sun/' + lat + '/' + lng + '/' + day + '/' + mon + '/' + utcOffset + '/0';
     }
 
     // Create the UTC offset from a given JS timezoneOffset value
     function createOffset(date) {
-        var sign = (date.getTimezoneOffset() > 0) ? "-" : "";
+        var sign = (date.getTimezoneOffset() > 0) ? '-' : '';
         return sign + Math.floor( Math.abs(date.getTimezoneOffset()) / 60);
     }
 
@@ -88,12 +90,12 @@ var sunupsundown = (function () {
                 toggleClass('fadeInUp', '#first-light, #sunrise, #sunset, #last-light');
 
             } else {
-                console.log("Sorry, the EarthTools service returned an error: " + request.status);
+                updateStatusMessage('Sorry, the EarthTools service returned an error: ' + request.status);
             }
         };
 
         request.onerror = function() {
-            console.log("Sorry, there was an error establishing a connection to the EarthTools service.");
+            updateStatusMessage('Sorry, there was an error establishing a connection to the EarthTools service.');
         };
 
         request.send();
@@ -108,9 +110,9 @@ var sunupsundown = (function () {
             mon = sunObjDate.month,
             // we don't have the year from sunObj, so assume it is the current year
             year = new Date().getFullYear(),
-            formattedDate = year + "-" + mon + "-" + day;
+            formattedDate = year + '-' + mon + '-' + day;
 
-            sunObjTime = new Date(formattedDate + " " + time); // ie "1970-01-01 12:00:00"
+            sunObjTime = new Date(formattedDate + ' ' + time); // ie '1970-01-01 12:00:00'
 
         return sunObjTime;
     }
@@ -129,7 +131,7 @@ var sunupsundown = (function () {
     // Updates the DOM element with the time param
     function updateDOMTime(el, timeObj) {
         var timeEl = document.getElementById(el),
-            timeTag = timeEl.getElementsByTagName("time"),
+            timeTag = timeEl.getElementsByTagName('time'),
             // a bit of extra work to pad the hours/mins with leading 0 when necessary
             timeHour = (timeObj.getHours()<10?'0':'') + timeObj.getHours(),
             timeMin = (timeObj.getMinutes()<10?'0':'') + timeObj.getMinutes(),
@@ -165,11 +167,30 @@ var sunupsundown = (function () {
         }
     }
 
+    // Creates the markup for the message div
+    function createMessageElement(msg) {
+        if (!messageEl) {
+            messageEl = document.createElement('div');
+            messageEl.id = 'loading-message';
+            messageEl.innerHTML = msg;
+            document.querySelectorAll(sunInfoEl)[0].appendChild(messageEl);
+        }
+    }
+
+    // Updates the status message
+    function updateStatusMessage(msg) {
+        if (!messageEl) {
+            createMessageElement(msg);
+        } else {
+            messageEl.innerHTML = msg;
+        }
+    }
+
     //–––––––– Get things rolling ––––––––––––//
 
     // This custom event listens for when the location is received and then fetches
     // the data from EarthTools
-    window.addEventListener("locationReported", function(evt) {
+    window.addEventListener('locationReported', function(evt) {
         var urlToFetch = buildXHR(evt.detail.lat, evt.detail.lng);
         getSunUpSunDown(urlToFetch);
     }, false);
