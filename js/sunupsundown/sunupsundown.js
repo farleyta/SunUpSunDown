@@ -137,6 +137,8 @@ var sunupsundown = (function () {
             timeMin = (timeObj.getMinutes()<10?'0':'') + timeObj.getMinutes(),
             timeAmPm = timeHour<12?'am':'pm';
 
+            console.log(timeObj);
+
         timeTag[0].setAttribute('datetime', timeObj.toISOString());
         timeTag[0].innerHTML = timeHour + ":" + timeMin + "<span class='ampm'>" + timeAmPm + "</span>";
     }
