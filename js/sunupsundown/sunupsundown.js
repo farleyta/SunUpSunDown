@@ -34,7 +34,7 @@ var sunupsundown = (function () {
     function buildXHR(lat,lng) {
         var currentDate = new Date(),
             day = currentDate.getDate(),
-            mon = currentDate.getMonth(),
+            mon = currentDate.getMonth() + 1,
             utcOffset = createOffset(currentDate);
 
         // Construct the Earthtools URL - note that utcOffset will differ 
