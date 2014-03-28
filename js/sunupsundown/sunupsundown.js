@@ -121,8 +121,12 @@ var sunupsundown = (function () {
     function getOffsetTime(firstTime, offset) {
         var newTime = new Date(firstTime);
 
+        console.log(firstTime);
+
         // Change the mins to be earlier than sunrise
         newTime.setMinutes(firstTime.getMinutes() + offset);
+
+        console.log(newTime);
 
         return newTime;
 
