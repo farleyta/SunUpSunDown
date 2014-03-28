@@ -106,16 +106,16 @@ var sunupsundown = (function () {
     function formatSunObjTime(sunObj, sunObjDate) {
         // get the pieces of the Date obj from the sun obj
         var time = sunObj,
+            sec = '59',
+            min = '20',
+            hour = '07',
             // we have to pad the day and month with 0 when necessary
             day = (sunObjDate.day<10?'0':'') + sunObjDate.day,
             mon = (sunObjDate.month<10?'0':'') + sunObjDate.month,
             // we don't have the year from sunObj, so assume it is the current year
-            year = new Date().getFullYear(),
-            formattedDate = year + '-' + mon + '-' + day;
+            year = new Date().getFullYear();
 
-            console.log(formattedDate + ' ' + time);
-
-            sunObjTime = new Date(formattedDate + ' ' + time); // ie '1970-01-01 12:00:00'
+            sunObjTime = new Date(year, mon, day, hour, min, sec);
 
         return sunObjTime;
     }
