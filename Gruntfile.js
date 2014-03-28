@@ -40,6 +40,7 @@ module.exports = function(grunt) {
           imagesDir: 'img',
           javascriptsDir: 'js',
           fontsDir: 'css/fonts',
+          httpImagesPath: '../<%= compass.dist.options.imagesDir %>',
           assetCacheBuster: 'none',
           outputStyle: 'compressed',
           require: 'compass-normalize'
