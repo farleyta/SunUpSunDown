@@ -112,6 +112,8 @@ var sunupsundown = (function () {
             year = new Date().getFullYear(),
             formattedDate = year + '-' + mon + '-' + day;
 
+            console.log(formattedDate + ' ' + time);
+
             sunObjTime = new Date(formattedDate + ' ' + time); // ie '1970-01-01 12:00:00'
 
         return sunObjTime;
@@ -121,12 +123,8 @@ var sunupsundown = (function () {
     function getOffsetTime(firstTime, offset) {
         var newTime = new Date(firstTime);
 
-        console.log(firstTime);
-
         // Change the mins to be earlier than sunrise
         newTime.setMinutes(firstTime.getMinutes() + offset);
-
-        console.log(newTime);
 
         return newTime;
 
@@ -140,8 +138,6 @@ var sunupsundown = (function () {
             timeHour = (timeObj.getHours()<10?'0':'') + timeObj.getHours(),
             timeMin = (timeObj.getMinutes()<10?'0':'') + timeObj.getMinutes(),
             timeAmPm = timeHour<12?'am':'pm';
-
-            console.log(timeObj);
 
         timeTag[0].setAttribute('datetime', timeObj.toISOString());
         timeTag[0].innerHTML = timeHour + ":" + timeMin + "<span class='ampm'>" + timeAmPm + "</span>";
