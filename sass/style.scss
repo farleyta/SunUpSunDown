@@ -4,6 +4,7 @@
 @import "normalize";
 @import "animations";
 
+$lightYellow: #feedac;
 $yellow: #ffc445;
 $orange: #d87319;
 $orangeLight: #f4ae74;
@@ -25,7 +26,7 @@ $greyDark: #333;
 }
 
 body {
-	background: image-url("bg.png");
+	background: $lightYellow image-url("bg.png");
 	font-family: 'Open Sans', sans-serif;
 	color: $white;
 	@include text-shadow(1px 1px 1px rgba($greyDark, 0.65));
